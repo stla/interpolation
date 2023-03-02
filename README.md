@@ -7,6 +7,8 @@ Interpolation of bivariate functions.
 [![R-CMD-check-valgrind](https://github.com/stla/interpolation/actions/workflows/R-CMD-check-valgrind.yaml/badge.svg)](https://github.com/stla/interpolation/actions/workflows/R-CMD-check-valgrind.yaml)
 <!-- badges: end -->
 
+![](https://raw.githubusercontent.com/stla/interpolation/main/inst/screenshots/interpolatedVectorField.png)
+
 
 ## License
 
