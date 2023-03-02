@@ -34,15 +34,25 @@
 #' a + bx*xnew + by*ynew
 interpfun <- function(x, y, z, method = "linear") {
   method <- match.arg(method, c("linear", "sibson"))
+  if(is.matrix(z)) {
+    z <- t(z)
+  }
   XYZ <- rbind(x, y, z)
   storage.mode(XYZ) <- "double"
   if(anyNA(XYZ)) {
     stop("Found missing values.")
   }
   if(method == "linear") {
-    delxyz <- delaunayXYZ_linear(XYZ)
-    out <- function(xnew, ynew) {
-      interpolate_linear(delxyz, rbind(xnew, ynew))
+    if(nrow(XYZ) == 3L) {
+      delxyz <- delaunayXYZ_linear(XYZ)
+      out <- function(xnew, ynew) {
+        interpolate_linear(delxyz, rbind(xnew, ynew))
+      }
+    } else {
+      delxyzz <- delaunayXYZZ_linear(XYZ)
+      out <- function(XYnew) {
+        interpolate_linear2(delxyzz, t(XYnew))
+      }
     }
   } else {
     delxyz <- delaunayXYZ_sibson(XYZ)

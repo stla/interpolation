@@ -5,8 +5,8 @@ delaunayXYZ_linear <- function(XYZ) {
     .Call(`_interpolation_delaunayXYZ_linear`, XYZ)
 }
 
-delaunayXYZ_linear2 <- function(XYZZ) {
-    .Call(`_interpolation_delaunayXYZ_linear2`, XYZZ)
+delaunayXYZZ_linear <- function(XYZZ) {
+    .Call(`_interpolation_delaunayXYZZ_linear`, XYZZ)
 }
 
 interpolate_linear <- function(xptr, XYnew) {

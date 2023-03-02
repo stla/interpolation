@@ -21,7 +21,7 @@ Rcpp::XPtr<std::pair<Delaunay2, Coord_field>> delaunayXYZ_linear(
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> delaunayXYZ_linear2(
+Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> delaunayXYZZ_linear(
     Rcpp::NumericMatrix XYZZ) {
   Delaunay2 T;
   Vector2_field value_function;
@@ -69,7 +69,7 @@ Rcpp::NumericVector interpolate_linear(
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector interpolate_linear2(
+Rcpp::NumericMatrix interpolate_linear2(
     Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> xptr,
     Rcpp::NumericMatrix XYnew) {
   typedef CGAL::Data_access<Vector2_field> Value_access;
@@ -98,7 +98,7 @@ Rcpp::NumericVector interpolate_linear2(
     zznew(Rcpp::_, i) = zznew_i;
   }
 
-  return zznew;
+  return Rcpp::transpose(zznew);
 }
 
 // [[Rcpp::export]]
