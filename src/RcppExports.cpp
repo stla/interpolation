@@ -22,6 +22,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// delaunayXYZ_linear2
+Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> delaunayXYZ_linear2(Rcpp::NumericMatrix XYZZ);
+RcppExport SEXP _interpolation_delaunayXYZ_linear2(SEXP XYZZSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type XYZZ(XYZZSEXP);
+    rcpp_result_gen = Rcpp::wrap(delaunayXYZ_linear2(XYZZ));
+    return rcpp_result_gen;
+END_RCPP
+}
 // interpolate_linear
 Rcpp::NumericVector interpolate_linear(Rcpp::XPtr<std::pair<Delaunay2, Coord_field>> xptr, Rcpp::NumericMatrix XYnew);
 RcppExport SEXP _interpolation_interpolate_linear(SEXP xptrSEXP, SEXP XYnewSEXP) {
@@ -34,8 +45,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// interpolate_linear2
+Rcpp::NumericVector interpolate_linear2(Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> xptr, Rcpp::NumericMatrix XYnew);
+RcppExport SEXP _interpolation_interpolate_linear2(SEXP xptrSEXP, SEXP XYnewSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> >::type xptr(xptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type XYnew(XYnewSEXP);
+    rcpp_result_gen = Rcpp::wrap(interpolate_linear2(xptr, XYnew));
+    return rcpp_result_gen;
+END_RCPP
+}
 // delaunayXYZ_sibson
-Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector_field>>> delaunayXYZ_sibson(Rcpp::NumericMatrix XYZ);
+Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>>> delaunayXYZ_sibson(Rcpp::NumericMatrix XYZ);
 RcppExport SEXP _interpolation_delaunayXYZ_sibson(SEXP XYZSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -46,12 +69,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // interpolate_sibson
-Rcpp::NumericVector interpolate_sibson(Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector_field>>> xptr, Rcpp::NumericMatrix XYnew);
+Rcpp::NumericVector interpolate_sibson(Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>>> xptr, Rcpp::NumericMatrix XYnew);
 RcppExport SEXP _interpolation_interpolate_sibson(SEXP xptrSEXP, SEXP XYnewSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector_field>>> >::type xptr(xptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>>> >::type xptr(xptrSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type XYnew(XYnewSEXP);
     rcpp_result_gen = Rcpp::wrap(interpolate_sibson(xptr, XYnew));
     return rcpp_result_gen;
@@ -60,7 +83,9 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_interpolation_delaunayXYZ_linear", (DL_FUNC) &_interpolation_delaunayXYZ_linear, 1},
+    {"_interpolation_delaunayXYZ_linear2", (DL_FUNC) &_interpolation_delaunayXYZ_linear2, 1},
     {"_interpolation_interpolate_linear", (DL_FUNC) &_interpolation_interpolate_linear, 2},
+    {"_interpolation_interpolate_linear2", (DL_FUNC) &_interpolation_interpolate_linear2, 2},
     {"_interpolation_delaunayXYZ_sibson", (DL_FUNC) &_interpolation_delaunayXYZ_sibson, 1},
     {"_interpolation_interpolate_sibson", (DL_FUNC) &_interpolation_interpolate_sibson, 2},
     {NULL, NULL, 0}

@@ -21,6 +21,25 @@ Rcpp::XPtr<std::pair<Delaunay2, Coord_field>> delaunayXYZ_linear(
 }
 
 // [[Rcpp::export]]
+Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> delaunayXYZ_linear2(
+    Rcpp::NumericMatrix XYZZ) {
+  Delaunay2 T;
+  Vector2_field value_function;
+  int npoints = XYZZ.ncol();
+  for(int i = 0; i < npoints; i++) {
+    Rcpp::NumericVector xyzz = XYZZ(Rcpp::_, i);
+    Point2 p(xyzz(0), xyzz(1));
+    T.insert(p);
+    Vector2 zz(xyzz(2), xyzz(3));
+    value_function.insert(std::make_pair(p, zz));
+  }
+
+  std::pair<Delaunay2, Vector2_field> out = std::make_pair(T, value_function);
+  return Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>>(
+      new std::pair<Delaunay2, Vector2_field>(out), false);
+}
+
+// [[Rcpp::export]]
 Rcpp::NumericVector interpolate_linear(
     Rcpp::XPtr<std::pair<Delaunay2, Coord_field>> xptr,
     Rcpp::NumericMatrix XYnew) {
@@ -28,7 +47,6 @@ Rcpp::NumericVector interpolate_linear(
   std::pair<Delaunay2, Coord_field> stuff = *(xptr.get());
   Delaunay2 T = stuff.first;
   Coord_field value_function = stuff.second;
-
   // coordinate computation
   int nnewpoints = XYnew.ncol();
   Rcpp::NumericVector znew(nnewpoints);
@@ -51,7 +69,40 @@ Rcpp::NumericVector interpolate_linear(
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector_field>>>
+Rcpp::NumericVector interpolate_linear2(
+    Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> xptr,
+    Rcpp::NumericMatrix XYnew) {
+  typedef CGAL::Data_access<Vector2_field> Value_access;
+  std::pair<Delaunay2, Vector2_field> stuff = *(xptr.get());
+  Delaunay2 T = stuff.first;
+  Vector2_field value_function = stuff.second;
+  // coordinate computation
+  int nnewpoints = XYnew.ncol();
+  Rcpp::NumericMatrix zznew(2, nnewpoints);
+  for(int i = 0; i < nnewpoints; i++) {
+    Rcpp::NumericVector xynew = XYnew(Rcpp::_, i);
+    Point2 p(xynew(0), xynew(1));
+    std::vector<std::pair<Point2, Coord>> coords;
+    CGAL::Triple nnc =
+        CGAL::natural_neighbor_coordinates_2(T, p, std::back_inserter(coords));
+    Rcpp::NumericVector zznew_i(2);
+    if(!nnc.third) {
+      zznew_i = Rcpp::NumericVector::create(Rcpp::NumericVector::get_na(),
+                                            Rcpp::NumericVector::get_na());
+    } else {
+      Coord norm = nnc.second;
+      Vector2 res = CGAL::linear_interpolation(
+          coords.begin(), coords.end(), norm, Value_access(value_function));
+      zznew_i = Rcpp::NumericVector::create(res.x(), res.y());
+    }
+    zznew(Rcpp::_, i) = zznew_i;
+  }
+
+  return zznew;
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>>>
 delaunayXYZ_sibson(Rcpp::NumericMatrix XYZ) {
   Delaunay2 T;
   Coord_field value_function;
@@ -63,31 +114,33 @@ delaunayXYZ_sibson(Rcpp::NumericMatrix XYZ) {
     value_function.insert(std::make_pair(p, xyz(2)));
   }
 
-  Vector_field gradient_function;
+  Vector2_field gradient_function;
   sibson_gradient_fitting_nn_2(
       T, std::inserter(gradient_function, gradient_function.begin()),
       CGAL::Data_access<Coord_field>(value_function), gradTraits());
 
-  std::pair<Coord_field, Vector_field> fields =
+  std::pair<Coord_field, Vector2_field> fields =
       std::make_pair(value_function, gradient_function);
-  std::pair<Delaunay2, std::pair<Coord_field, Vector_field>> out =
+  std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>> out =
       std::make_pair(T, fields);
-  return Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector_field>>>(
-      new std::pair<Delaunay2, std::pair<Coord_field, Vector_field>>(out),
+  return Rcpp::XPtr<
+      std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>>>(
+      new std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>>(out),
       false);
 }
 
 // [[Rcpp::export]]
 Rcpp::NumericVector interpolate_sibson(
-    Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector_field>>> xptr,
+    Rcpp::XPtr<std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>>>
+        xptr,
     Rcpp::NumericMatrix XYnew) {
   typedef CGAL::Data_access<Coord_field> Value_access;
-  std::pair<Delaunay2, std::pair<Coord_field, Vector_field>> stuff =
+  std::pair<Delaunay2, std::pair<Coord_field, Vector2_field>> stuff =
       *(xptr.get());
   Delaunay2 T = stuff.first;
-  std::pair<Coord_field, Vector_field> fields = stuff.second;
+  std::pair<Coord_field, Vector2_field> fields = stuff.second;
   Coord_field value_function = fields.first;
-  Vector_field gradient_function = fields.second;
+  Vector2_field gradient_function = fields.second;
 
   // coordinate computation
   int nnewpoints = XYnew.ncol();
@@ -105,7 +158,7 @@ Rcpp::NumericVector interpolate_sibson(
       std::pair<Coord, bool> res = CGAL::sibson_c1_interpolation_square(
           coords.begin(), coords.end(), norm, p,
           CGAL::Data_access<Coord_field>(value_function),
-          CGAL::Data_access<Vector_field>(gradient_function), gradTraits());
+          CGAL::Data_access<Vector2_field>(gradient_function), gradTraits());
       if(!res.second) {
         znew(i) = Rcpp::NumericVector::get_na();
       } else {

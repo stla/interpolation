@@ -5,8 +5,16 @@ delaunayXYZ_linear <- function(XYZ) {
     .Call(`_interpolation_delaunayXYZ_linear`, XYZ)
 }
 
+delaunayXYZ_linear2 <- function(XYZZ) {
+    .Call(`_interpolation_delaunayXYZ_linear2`, XYZZ)
+}
+
 interpolate_linear <- function(xptr, XYnew) {
     .Call(`_interpolation_interpolate_linear`, xptr, XYnew)
+}
+
+interpolate_linear2 <- function(xptr, XYnew) {
+    .Call(`_interpolation_interpolate_linear2`, xptr, XYnew)
 }
 
 delaunayXYZ_sibson <- function(XYZ) {
