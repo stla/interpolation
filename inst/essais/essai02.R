@@ -22,10 +22,11 @@ interpolate <- function(delxyz, xnew, ynew) {
 
 
 a <- 0.2; bx <- 0.3; by <- -0.4; c <- 0.5
-x <- y <- seq(1, 10, by = .25)
-y <- y + 6*rnorm(10)
+x0 <- y0 <- seq(1, 10, by = 1)
+Grid <- expand.grid(X = x0, Y = y0)
+x <- Grid$X; y <- Grid$Y
 z <- a + bx*x + by*y + c*(x^2 + y^2)
-xnew <- ynew <- seq(3, 12, by = 1)
+xnew <- ynew <- seq(1.5, 9.5, by = 1)
 
 delxyz <- delaunayXYZ(x, y, z, "sibson")
 znew <- interpolate(delxyz, xnew, ynew)
