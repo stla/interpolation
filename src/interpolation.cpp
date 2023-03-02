@@ -33,7 +33,6 @@ Rcpp::NumericVector interpolate_linear(
   int nnewpoints = XYnew.ncol();
   Rcpp::NumericVector znew(nnewpoints);
   for(int i = 0; i < nnewpoints; i++) {
-    Rcpp::Rcout << i << " - ";
     Rcpp::NumericVector xynew = XYnew(Rcpp::_, i);
     Point2 p(xynew(0), xynew(1));
     std::vector<std::pair<Point2, Coord>> coords;
@@ -94,7 +93,6 @@ Rcpp::NumericVector interpolate_sibson(
   int nnewpoints = XYnew.ncol();
   Rcpp::NumericVector znew(nnewpoints);
   for(int i = 0; i < nnewpoints; i++) {
-    Rcpp::Rcout << i << " - ";
     Rcpp::NumericVector xynew = XYnew(Rcpp::_, i);
     Point2 p(xynew(0), xynew(1));
     std::vector<std::pair<Point2, Coord>> coords;

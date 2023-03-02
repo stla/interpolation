@@ -21,6 +21,27 @@ A function whose graph interpolates the points \code{((x,y), z)}.
 Generates a function \code{f(x,y)} that interpolates the known 
   function values at some given \code{(x,y)}-coordinates.
 }
+\details{
+The new pairs of coordinates must be in the convex hull of the
+  points \code{(x,y)}. If a new pair is outside the convex hull, the 
+  interpolating function returns \code{NA} for this pair. 
+  The linear method is exact for a function of the form 
+  \code{f(x,y) = a + bx*x + by*y}. The Sibson method is exact for a function 
+  of the form \code{f(x,y) = a + bx*x + by*y + c*(x^2 + y^2)}. This method 
+  estimates the gradient of the function and this can fail if the data are 
+  insufficient, in which case \code{NA} is returned.
+}
 \examples{
 library(interpolation)
+a <- 0.2; bx <- 0.3; by <- -0.4
+x0 <- y0 <- seq(1, 10, by = 1)
+Grid <- expand.grid(X = x0, Y = y0)
+x <- Grid$X; y <- Grid$Y
+z <- a + bx*x + by*y 
+xnew <- ynew <- seq(2.5, 8.5, by = 1)
+fun <- interpfun(x, y, z, "linear")
+# computed values:
+( znew <- fun(xnew, ynew) )
+# true values:
+a + bx*xnew + by*ynew
 }
