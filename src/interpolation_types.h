@@ -6,12 +6,17 @@
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
-#include <CGAL/Interpolation_traits_2.h>
 #include <CGAL/natural_neighbor_coordinates_2.h>
+#include <CGAL/Interpolation_traits_2.h>
+#include <CGAL/Interpolation_gradient_fitting_traits_2.h>
+#include <CGAL/sibson_gradient_fitting.h>
 #include <CGAL/interpolation_functions.h>
+
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Delaunay_triangulation_2<K>                   Delaunay2;
 typedef CGAL::Interpolation_traits_2<K>                     Traits;
-typedef K::FT                                               Coord_type;
+typedef CGAL::Interpolation_gradient_fitting_traits_2<K>    gradTraits;
+typedef K::FT                                               Coord;
 typedef K::Point_2                                          Point2;
-typedef std::map<Point2, Coord_type, K::Less_xy_2>          Coord_map;
+typedef std::map<Point2, Coord, K::Less_xy_2>               Coord_field;
+typedef std::map<Point2, K::Vector_2, K::Less_xy_2>         Vector_field;

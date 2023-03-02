@@ -1,7 +1,7 @@
 library(interpolation)
 
-delaunayXYZ <- function(x, y, z) {
-  delaunayXYZ_cpp(rbind(x, y, z))
+delaunayXYZ <- function(x, y, z, method = "linear") {
+  delaunayXYZ_linear(rbind(x, y, z))
 }
 interpolate <- function(delxyz, xnew, ynew) {
   interpolate_linear(delxyz, rbind(xnew, ynew))
