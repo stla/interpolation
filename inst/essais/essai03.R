@@ -2,13 +2,18 @@ library(interpolation)
 
 interpfun <- function(x, y, z, method = "linear") {
   method <- match.arg(method, c("linear", "sibson"))
+  XYZ <- rbind(x, y, z)
+  storage.mode(XYZ) <- "double"
+  if(anyNA(XYZ)) {
+    stop("Found missing values.")
+  }
   if(method == "linear") {
-    delxyz <- delaunayXYZ_linear(rbind(x, y, z))
+    delxyz <- delaunayXYZ_linear(XYZ)
     out <- function(xnew, ynew) {
       interpolate_linear(delxyz, rbind(xnew, ynew))
     }
   } else {
-    delxyz <- delaunayXYZ_sibson(rbind(x, y, z))
+    delxyz <- delaunayXYZ_sibson(XYZ)
     out <- function(xnew, ynew) {
       interpolate_sibson(delxyz, rbind(xnew, ynew))
     }
