@@ -9,12 +9,20 @@ delaunayXYZZ_linear <- function(XYZZ) {
     .Call(`_interpolation_delaunayXYZZ_linear`, XYZZ)
 }
 
+delaunayXYZZZ_linear <- function(XYZZZ) {
+    .Call(`_interpolation_delaunayXYZZZ_linear`, XYZZZ)
+}
+
 interpolate_linear <- function(xptr, XYnew) {
     .Call(`_interpolation_interpolate_linear`, xptr, XYnew)
 }
 
 interpolate_linear2 <- function(xptr, XYnew) {
     .Call(`_interpolation_interpolate_linear2`, xptr, XYnew)
+}
+
+interpolate_linear3 <- function(xptr, XYnew) {
+    .Call(`_interpolation_interpolate_linear3`, xptr, XYnew)
 }
 
 delaunayXYZ_sibson <- function(XYZ) {

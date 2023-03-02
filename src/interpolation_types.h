@@ -19,5 +19,7 @@ typedef CGAL::Interpolation_gradient_fitting_traits_2<K>    gradTraits;
 typedef K::FT                                               Coord;
 typedef K::Point_2                                          Point2;
 typedef K::Vector_2                                         Vector2;
+typedef K::Vector_3                                         Vector3;
 typedef std::map<Point2, Coord, K::Less_xy_2>               Coord_field;
 typedef std::map<Point2, Vector2, K::Less_xy_2>             Vector2_field;
+typedef std::map<Point2, Vector3, K::Less_xy_2>             Vector3_field;

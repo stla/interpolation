@@ -40,6 +40,25 @@ Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> delaunayXYZZ_linear(
 }
 
 // [[Rcpp::export]]
+Rcpp::XPtr<std::pair<Delaunay2, Vector3_field>> delaunayXYZZZ_linear(
+    Rcpp::NumericMatrix XYZZZ) {
+  Delaunay2 T;
+  Vector3_field value_function;
+  int npoints = XYZZZ.ncol();
+  for(int i = 0; i < npoints; i++) {
+    Rcpp::NumericVector xyzzz = XYZZZ(Rcpp::_, i);
+    Point2 p(xyzzz(0), xyzzz(1));
+    T.insert(p);
+    Vector3 zzz(xyzzz(2), xyzzz(3), xyzzz(4));
+    value_function.insert(std::make_pair(p, zzz));
+  }
+  
+  std::pair<Delaunay2, Vector3_field> out = std::make_pair(T, value_function);
+  return Rcpp::XPtr<std::pair<Delaunay2, Vector3_field>>(
+      new std::pair<Delaunay2, Vector3_field>(out), false);
+}
+
+// [[Rcpp::export]]
 Rcpp::NumericVector interpolate_linear(
     Rcpp::XPtr<std::pair<Delaunay2, Coord_field>> xptr,
     Rcpp::NumericMatrix XYnew) {
@@ -99,6 +118,40 @@ Rcpp::NumericMatrix interpolate_linear2(
   }
 
   return Rcpp::transpose(zznew);
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix interpolate_linear3(
+    Rcpp::XPtr<std::pair<Delaunay2, Vector3_field>> xptr,
+    Rcpp::NumericMatrix XYnew) {
+  typedef CGAL::Data_access<Vector3_field> Value_access;
+  std::pair<Delaunay2, Vector3_field> stuff = *(xptr.get());
+  Delaunay2 T = stuff.first;
+  Vector3_field value_function = stuff.second;
+  // coordinate computation
+  int nnewpoints = XYnew.ncol();
+  Rcpp::NumericMatrix zzznew(3, nnewpoints);
+  for(int i = 0; i < nnewpoints; i++) {
+    Rcpp::NumericVector xynew = XYnew(Rcpp::_, i);
+    Point2 p(xynew(0), xynew(1));
+    std::vector<std::pair<Point2, Coord>> coords;
+    CGAL::Triple nnc =
+      CGAL::natural_neighbor_coordinates_2(T, p, std::back_inserter(coords));
+    Rcpp::NumericVector zzznew_i(3);
+    if(!nnc.third) {
+      zzznew_i = Rcpp::NumericVector::create(Rcpp::NumericVector::get_na(),
+                                             Rcpp::NumericVector::get_na(),
+                                             Rcpp::NumericVector::get_na());
+    } else {
+      Coord norm = nnc.second;
+      Vector3 res = CGAL::linear_interpolation(
+        coords.begin(), coords.end(), norm, Value_access(value_function));
+      zzznew_i = Rcpp::NumericVector::create(res.x(), res.y(), res.z());
+    }
+    zzznew(Rcpp::_, i) = zzznew_i;
+  }
+  
+  return Rcpp::transpose(zzznew);
 }
 
 // [[Rcpp::export]]

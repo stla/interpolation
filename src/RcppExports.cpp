@@ -33,6 +33,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// delaunayXYZZZ_linear
+Rcpp::XPtr<std::pair<Delaunay2, Vector3_field>> delaunayXYZZZ_linear(Rcpp::NumericMatrix XYZZZ);
+RcppExport SEXP _interpolation_delaunayXYZZZ_linear(SEXP XYZZZSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type XYZZZ(XYZZZSEXP);
+    rcpp_result_gen = Rcpp::wrap(delaunayXYZZZ_linear(XYZZZ));
+    return rcpp_result_gen;
+END_RCPP
+}
 // interpolate_linear
 Rcpp::NumericVector interpolate_linear(Rcpp::XPtr<std::pair<Delaunay2, Coord_field>> xptr, Rcpp::NumericMatrix XYnew);
 RcppExport SEXP _interpolation_interpolate_linear(SEXP xptrSEXP, SEXP XYnewSEXP) {
@@ -54,6 +65,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<std::pair<Delaunay2, Vector2_field>> >::type xptr(xptrSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type XYnew(XYnewSEXP);
     rcpp_result_gen = Rcpp::wrap(interpolate_linear2(xptr, XYnew));
+    return rcpp_result_gen;
+END_RCPP
+}
+// interpolate_linear3
+Rcpp::NumericMatrix interpolate_linear3(Rcpp::XPtr<std::pair<Delaunay2, Vector3_field>> xptr, Rcpp::NumericMatrix XYnew);
+RcppExport SEXP _interpolation_interpolate_linear3(SEXP xptrSEXP, SEXP XYnewSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<std::pair<Delaunay2, Vector3_field>> >::type xptr(xptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type XYnew(XYnewSEXP);
+    rcpp_result_gen = Rcpp::wrap(interpolate_linear3(xptr, XYnew));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -84,8 +107,10 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_interpolation_delaunayXYZ_linear", (DL_FUNC) &_interpolation_delaunayXYZ_linear, 1},
     {"_interpolation_delaunayXYZZ_linear", (DL_FUNC) &_interpolation_delaunayXYZZ_linear, 1},
+    {"_interpolation_delaunayXYZZZ_linear", (DL_FUNC) &_interpolation_delaunayXYZZZ_linear, 1},
     {"_interpolation_interpolate_linear", (DL_FUNC) &_interpolation_interpolate_linear, 2},
     {"_interpolation_interpolate_linear2", (DL_FUNC) &_interpolation_interpolate_linear2, 2},
+    {"_interpolation_interpolate_linear3", (DL_FUNC) &_interpolation_interpolate_linear3, 2},
     {"_interpolation_delaunayXYZ_sibson", (DL_FUNC) &_interpolation_delaunayXYZ_sibson, 1},
     {"_interpolation_interpolate_sibson", (DL_FUNC) &_interpolation_interpolate_sibson, 2},
     {NULL, NULL, 0}
