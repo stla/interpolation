@@ -6,9 +6,9 @@ Authors@R:
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre"))
 Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
 Description: Provides two different methods, linear and nonlinear, to
-    interpolate a bivariate function. The interpolated data is not
-    necessarily gridded. The algorithms are performed by the 'C++'
-    library' CGAL' (<https://www.cgal.org/>).
+    interpolate a bivariate function, scalar-valued or vector-valued. 
+    The interpolated data is not necessarily gridded. The algorithms 
+    are performed by the 'C++' library' CGAL' (<https://www.cgal.org/>).
 License: GPL-3
 URL: https://github.com/stla/interpolation
 BugReports: https://github.com/stla/interpolation/issues
