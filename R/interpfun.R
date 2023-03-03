@@ -76,19 +76,19 @@ interpfun <- function(x, y, z, method = "linear") {
   if(method == "linear") {
     if(nrow(XYZ) == 3L) {
       delxyz <- delaunayXYZ_linear(XYZ)
-      out <- function(xnew, ynew) {
+      return(function(xnew, ynew) {
         interpolate_linear(delxyz, rbind(xnew, ynew))
-      }
+      })
     } else if(nrow(XYZ) == 4L) {
       delxyzz <- delaunayXYZZ_linear(XYZ)
-      out <- function(XYnew) {
+      return(function(XYnew) {
         interpolate_linear2(delxyzz, t(XYnew))
-      }
+      })
     } else if(nrow(XYZ) == 5L) {
       delxyzzz <- delaunayXYZZZ_linear(XYZ)
-      out <- function(XYnew) {
+      return(function(XYnew) {
         interpolate_linear3(delxyzzz, t(XYnew))
-      }
+      })
     } else {
       stop("Something wrong regarding x, y, z.")
     }
@@ -97,10 +97,8 @@ interpfun <- function(x, y, z, method = "linear") {
       stop("Sibson interpolation is not available for vector-valued functions.")
     }
     delxyz <- delaunayXYZ_sibson(XYZ)
-    out <- function(xnew, ynew) {
+    return(function(xnew, ynew) {
       interpolate_sibson(delxyz, rbind(xnew, ynew))
-    }
+    })
   }
-  attr(out, "method") <- method
-  out
 }
