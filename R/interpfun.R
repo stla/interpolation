@@ -9,7 +9,7 @@
 #'   \code{"sibson"}; the \code{"sibson"} method is not available for 
 #'   vector-valued functions, i.e. if \code{z} is a matrix
 #'
-#' @return A function whose graph interpolates the points \code{((x,y), z)}. 
+#' @return A function whose graph interpolates the data \code{((x,y),z)}. 
 #' @export
 #'
 #' @details The new pairs of coordinates must be in the convex hull of the

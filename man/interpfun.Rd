@@ -17,7 +17,7 @@ interpfun(x, y, z, method = "linear")
 vector-valued functions, i.e. if \code{z} is a matrix}
 }
 \value{
-A function whose graph interpolates the points \code{((x,y), z)}.
+A function whose graph interpolates the data \code{((x,y),z)}.
 }
 \description{
 Generates a function \code{f(x,y)} that interpolates the known 
