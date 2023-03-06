@@ -9,6 +9,7 @@ Interpolation of bivariate functions.
 
 ![](https://raw.githubusercontent.com/stla/interpolation/main/inst/screenshots/interpolatedVectorField.png)
 
+![](https://raw.githubusercontent.com/stla/interpolation/main/inst/screenshots/Cauchy.png)
 
 ## License
 
